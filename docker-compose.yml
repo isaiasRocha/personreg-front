@@ -1,0 +1,18 @@
+version: '3.8'
+
+networks:
+  person-reg-net:  # Use a mesma rede definida no backend
+   external: true  # Vamos usar uma rede externa compartilhada
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: person_reg_frontend
+    image: rochasystems/person_reg_frontend:v1.0.0
+    restart: always
+    ports:
+      - "80:80"
+    networks:
+      - person-reg-net

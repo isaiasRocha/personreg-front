@@ -1,24 +1,30 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { PersonInput } from './model/person-input';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs/internal/Observable';
-import { BaseService } from './service/base-service';
-import { catchError, map } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import {environment} from "../../environments/environment";
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class PersonRegistrationService extends BaseService {
+export class PersonRegistrationService {
 
-  constructor(
-    private http: HttpClient
-  ) { super() }
+  private readonly apiUrl = environment.apiUrl;  // URL dinâmica
 
-  save(person : PersonInput) : Observable<any> {
-    return this.http.post(this.UrlService, person)
-    .pipe(
-        map(super.extractData),
-        catchError(this.serviceError));
-}
+  constructor(private http: HttpClient) { }
 
+  save(person: PersonInput): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+
+    return this.http.post(this.apiUrl, person, { headers })
+      .pipe(
+        map(response => response),
+        catchError(error => {
+          console.error('Erro na requisição:', error);
+          throw error;
+        })
+      );
+  }
 }

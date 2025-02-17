@@ -2,7 +2,7 @@ import { HttpErrorResponse } from "@angular/common/http"
 import { throwError } from "rxjs";
 
 export abstract class BaseService {
-    protected UrlService: string= `http://localhost:8080/personreg-back/v1`
+    protected UrlService: string= `http://localhost:8080/v1`
 
     protected extractData(response : any) {
         return response || {};
